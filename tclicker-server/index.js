@@ -21,6 +21,10 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+app.get('/', async (req, res) => {
+  res.send('Hello World')
+});
+
 app.post('/api/upgrades', async (req, res) => {
   const initData = req.get("authorization");
 

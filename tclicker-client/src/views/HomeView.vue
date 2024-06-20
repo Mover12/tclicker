@@ -1,5 +1,5 @@
 <script setup>
-  import { ref } from 'vue'
+  import { Teleport, ref } from 'vue'
   import clicker from '@/main'
   import { useUserStore } from '@/stores/user'
 
@@ -35,6 +35,7 @@
   }
 
   function click() {
+    Telegram.WebApp.HapticFeedback.impactOccurred('light')
     user_store.user.available_clicks--
     user_store.user.clicks_count++
     if( user_store.user.available_clicks == 0) isBtnDisabled.value = true

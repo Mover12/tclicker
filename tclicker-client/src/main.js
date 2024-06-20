@@ -7,7 +7,7 @@ import { createPinia } from 'pinia'
 import Clicker from './utils/Clicker'
   
 const clicker = new Clicker({
-    url: 'https://unrivaled-bublanina-2e9c1b.netlify.app:8000',
+    url: 'https://tclicker-server.onrender.com',
     token: Telegram.WebApp.initData
 })
 

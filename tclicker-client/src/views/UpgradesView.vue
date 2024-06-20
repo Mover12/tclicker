@@ -16,6 +16,7 @@
     });
     
     async function buy_upgade(e) {
+        Telegram.WebApp.HapticFeedback.impactOccurred('light')
         const upgrade_id = e.currentTarget.getAttribute('upgrade_id')
         user_store.user = (await clicker.buy(upgrade_id).then(res => res.json())).user
     }

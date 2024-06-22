@@ -5,10 +5,11 @@ import router from './router'
 import { createPinia } from 'pinia'
 
 import Clicker from './utils/Clicker'
-  
+
 const clicker = new Clicker({
-    url: 'https://tclicker-server.onrender.com',
-    token: Telegram.WebApp.initData
+    url: 'localhost:8000',
+    token: Telegram.WebApp.initData,
+    schema: 'public'
 })
 
 const app = createApp(App)

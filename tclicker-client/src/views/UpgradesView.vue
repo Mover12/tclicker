@@ -1,17 +1,15 @@
 <script setup>
-    import { ref } from 'vue'
     import Upgrade from '../components/Upgrade.vue'
     import clicker from '@/main'
     import { useUserStore } from '@/stores/user';
 
     const user_store = useUserStore();
-    const upgrades = ref();
 
     clicker.sync().then(async res => {
         if(res.status == '200') {
             const body = await res.json()
             user_store.user = body.user
-            upgrades.value = await clicker.upgrades().then(res => res.json())
+            user_store.upgrades = await clicker.upgrades().then(res => res.json())
         }
     });
     
@@ -24,10 +22,10 @@
 
 <template>
     <div class="upgrades">
-        <Upgrade @click="buy_upgade" v-for="upgrade in upgrades" :upgrade_id='upgrade.id'>
+        <Upgrade @click="buy_upgade" v-for="upgrade of user_store.upgrades" :upgrade_id='upgrade.upgrade_id'>
             <template #name>{{upgrade.name}}</template>
             <template #description>{{upgrade.description}}</template>
-            <template #level>{{user_store.user.upgrades[upgrade.id]?.upgrade_level || 0}}</template>
+            <template #level>{{user_store.user.upgrades[upgrade.upgrade_id]?.upgrade_level || 0}}</template>
             <template #price>{{upgrade.price}}</template>
         </Upgrade>
     </div>

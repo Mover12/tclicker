@@ -1,5 +1,5 @@
 <script setup>
-  import { Teleport, ref } from 'vue'
+  import { ref } from 'vue'
   import clicker from '@/main'
   import { useUserStore } from '@/stores/user'
 
@@ -16,9 +16,6 @@
   });
 
   async function init() {
-    const initData = Object.fromEntries(decodeURIComponent(clicker.token).split('&').map(elem => elem.split('=')))
-    initData.user = JSON.parse(initData.user)
-
     setInterval(async () => {
       user_store.user = (await clicker.sync().then(res => res.json())).user
     }, 30000)
@@ -26,8 +23,8 @@
     setInterval(async () => {
       if( user_store.user.available_clicks <  user_store.user.max_available_clicks) user_store.user.available_clicks++
       if( user_store.user.available_clicks > 0) isBtnDisabled.value = false
-      user_store.user.clicks_count = Number( user_store.user.clicks_count) + 1000 *  user_store.user.clicks_per_ms
-    }, 1000)
+      user_store.user.clicks_count = Number(user_store.user.clicks_count) + user_store.user.clicks_per_ms / user_store.user.ms_to_clicks
+    }, 1 / user_store.user.ms_to_clicks)
 
     Telegram.WebApp.expand()
 
@@ -37,7 +34,7 @@
   function click() {
     Telegram.WebApp.HapticFeedback.impactOccurred('light')
     user_store.user.available_clicks--
-    user_store.user.clicks_count++
+    user_store.user.clicks_count = Number(user_store.user.clicks_count) + Number(user_store.user.clicks_ratio)
     if( user_store.user.available_clicks == 0) isBtnDisabled.value = true
     localStorage.setItem('clicks', Number(localStorage.getItem('clicks')) + 1)
   }
